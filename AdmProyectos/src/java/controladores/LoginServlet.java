@@ -7,13 +7,16 @@ package controladores;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import emtity.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import jpa.UsuarioFacade;
 
 /**
  *
@@ -22,6 +25,9 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
 public class LoginServlet extends HttpServlet {
 
+    @EJB
+    private UsuarioFacade jpa_user;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -50,6 +56,11 @@ public class LoginServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         out.print(gson.toJson(object));
         out.flush();
+        
+        Usuario u1= jpa_user.find(new Usuario(""));
+        
+        Usuario u = new Usuario(usuario, password, usuario, usuario, usuario);
+        jpa_user.create(u);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
