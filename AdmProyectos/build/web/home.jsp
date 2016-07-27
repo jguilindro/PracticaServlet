@@ -80,12 +80,12 @@
         </tbody>
       </table>
     </div>
-
+      
     <!-- Modal -->
     <div class="modal fade" id="modalUsuarios" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
-          <form>
+          <form id ="form_usuario">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
               <h4 class="modal-title">Ingresar Usuario</h4>
@@ -95,7 +95,7 @@
                   <input type="text" class="form-control" id="inputNombre" name="inputNombre" placeholder="Nombre">
                 </div>
                 <div class="form-group">
-                  <input type="email" class="form-control" id="inputApellido" name="inputEmail" placeholder="Email">
+                  <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="Email">
                 </div>
                 <div class="form-group">
                   <select class="form-control" id="selectRol" name="selectRol">
@@ -128,6 +128,50 @@
                  ]
             });
             
+            $("#form_usuario").submit(function(e){
+                e.preventDefault();
+                var url= "UsuarioServlet";
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: $("#form_usuario").serialize()+ "&name=usuario",
+                    success: function(data){
+                        console.log(data);
+                    }
+                });
+            });
+            
+            $(".glyphicon-remove").click(function(e){
+                e.preventDefault();
+                var url= "UsuarioServlet";
+                var nombre = $(this).parents("tr").find("td:nth-child(2)").text();
+                var email  = $(this).parents("tr").find("td:nth-child(3)").text();
+                var rol    = $(this).parents("tr").find("td:nth-child(4)").text();
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: {name: "del", inputNombre: nombre, inputEmail: email, selectRol: rol},
+                    success: function(data){
+                        console.log(data);
+                    }
+                }); 
+            });
+            
+            $(".glyphicon-edit").click(function(e){
+                e.preventDefault();
+                var url= "UsuarioServlet";
+                var nombre = $(this).parents("tr").find("td:nth-child(2)").text();
+                var email  = $(this).parents("tr").find("td:nth-child(3)").text();
+                var rol    = $(this).parents("tr").find("td:nth-child(4)").text();
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: {name: "edit", inputNombre: nombre, inputEmail: email, selectRol: rol},                 
+                    success: function(data){
+                        console.log(data);
+                    }
+                }); 
+            });
         });
     </script>
   </body>
