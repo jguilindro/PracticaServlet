@@ -74,7 +74,8 @@ public class UtilJdbc {
         int tipo_documento=1;
         try {
             Class.forName("org.postgresql.Driver");
-            c = DriverManager.getConnection(conexion,user, clave);
+            //c = DriverManager.getConnection(conexion,user, clave);
+            c = DriverManager.getConnection(dbURL);
             c.setAutoCommit(false);
             switch(tipo_documento){
                 case 1:
