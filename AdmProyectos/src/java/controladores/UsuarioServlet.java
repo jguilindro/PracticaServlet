@@ -5,10 +5,12 @@
  */
 package controladores;
 
+import base.datos.UtilJdbc;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.rmi.CORBA.Util;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -48,6 +50,8 @@ public class UsuarioServlet extends HttpServlet {
             object.addProperty("Email", inputEmail);
             object.addProperty("Rol", selectRol);
             object.addProperty("Estado", name);
+            System.out.println("aqui estoy --");
+            UtilJdbc.ingresarUsusario(inputNombre, inputEmail, selectRol);
         }
         if(name.equals("edit")){
         //Ingreso de usuario a la base de datos.
@@ -62,6 +66,7 @@ public class UsuarioServlet extends HttpServlet {
             object.addProperty("Email", inputEmail);
             object.addProperty("Rol", selectRol);
             object.addProperty("Estado", name);
+            UtilJdbc.eliminarUsusario(inputEmail);
         }
         PrintWriter out = response.getWriter();
         out.print(gson.toJson(object));

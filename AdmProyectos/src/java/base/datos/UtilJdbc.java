@@ -65,58 +65,67 @@ public class UtilJdbc {
         }//end try
     }
     
-    public static void anulacionDocumentoElectronico(String numero_autorizacion, int id_documento
-            , String proveedor, String num_estb_pto, String secuencia, String Clave_acceso
-            , Date fecha_emision,String file){
+    public static void eliminarUsusario(String cad){
         Connection c = null;
         PreparedStatement preparedStatement = null;
         String sql = null;
         int tipo_documento=1;
         try {
-            Class.forName("org.postgresql.Driver");
-            //c = DriverManager.getConnection(conexion,user, clave);
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
             c = DriverManager.getConnection(dbURL);
             c.setAutoCommit(false);
-            switch(tipo_documento){
-                case 1:
-                    sql = "INSERT INTO public.anulacion_comprobante_electronico(\n" +
-                        "            numero_autorizacion, factura_id, \n" +
-                        "            proveedor, numero_estab_punt_emision, secuencia, \n" +
-                        "            clave_acceso, fecha_anulacion, fecha_creacion, fecha_emision, \n" +
-                        "            motivo, tipo, status, file)\n" +
-                        "    VALUES (?, ?, \n" +
-                        "            ?, ?, ?, \n" +
-                        "            ?, ?, ?, ?, \n" +
-                        "            ?, ?, ?, ?);";
-                    break;
-                case 4:
-                    sql = "UPDATE nota_credito_desktop SET status_send_email = ? WHERE id =? ;";
-                    break;
-                case 6:
-                    sql = "UPDATE guia_remision_desktop SET status_send_email = ? WHERE id =? ;";
-                    break;
-                case 7:
-                    sql = "UPDATE retencion_desktop SET status_send_email = ? WHERE id =? ;";
-                    break;
-                default:
-                    //sql = "UPDATE pedido SET status_send_email = ? WHERE id =? ;";
-                    break;
-            }
+            sql = "DELETE from USUARIO where EMIAL=? ";
+            
             //System.out.println("Rows impacted : " + sql ); 
             preparedStatement = c.prepareStatement(sql);
-            preparedStatement.setString(1, numero_autorizacion);
-            preparedStatement.setInt(2, id_documento);
-            preparedStatement.setString(3, proveedor);
-            preparedStatement.setString(4, num_estb_pto);
-            preparedStatement.setString(5, secuencia);
-            preparedStatement.setString(6, Clave_acceso);
-            preparedStatement.setDate(7, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
-            preparedStatement.setDate(8, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
-            preparedStatement.setDate(9, fecha_emision);
-            preparedStatement.setString(10, "ERROR DATOS DOCUMENTOS");
-            preparedStatement.setInt(11, tipo_documento);
-            preparedStatement.setInt(12, 0);
-            preparedStatement.setString(13, file);
+            preparedStatement.setString(1, cad);         
+            int rows = preparedStatement.executeUpdate();
+            c.commit();
+            //System.out.println("Rows actualizarEstadoDocumentoAutorizado : " + rows );            
+            
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(UtilJdbc.class.getName()).log(Level.SEVERE, null, ex);
+            if (c != null) {
+                try {
+                    System.err.print("Transaction is being rolled back");
+                    c.rollback();
+                } catch(SQLException excep) {
+                }
+            }
+        } finally{
+            //finally block used to close resources
+            try{
+                if(preparedStatement!=null)
+                    preparedStatement.close();
+            }catch(SQLException se2){
+            }// nothing we can do
+            try{
+                if(c!=null)
+                    c.close();
+            }catch(SQLException se){
+                se.printStackTrace();
+            }//end finally try
+        }//end try
+    }
+    
+    public static void ingresarUsusario(String nombre, String email, String rol){
+        Connection c = null;
+        PreparedStatement preparedStatement = null;
+        String sql = null;
+        int tipo_documento=1;
+        try {
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            c = DriverManager.getConnection(dbURL);
+            c.setAutoCommit(false);
+            sql = "insert into USUARIO (USER_NAME,PASSWORD,EMIAL,NOMBRE,ROL) values (?, ?, ?, ?, ?)";
+            
+            //System.out.println("Rows impacted : " + sql ); 
+            preparedStatement = c.prepareStatement(sql);
+            preparedStatement.setString(1, nombre);
+            preparedStatement.setString(2, nombre);
+            preparedStatement.setString(3, email);
+            preparedStatement.setString(4, nombre);
+            preparedStatement.setString(5, rol);            
             int rows = preparedStatement.executeUpdate();
             c.commit();
             //System.out.println("Rows actualizarEstadoDocumentoAutorizado : " + rows );            
