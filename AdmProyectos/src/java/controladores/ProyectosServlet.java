@@ -5,11 +5,8 @@
  */
 package controladores;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,9 +17,9 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author estudiante.2016
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends HttpServlet {
-    
+@WebServlet(name = "ProyectosServlet", urlPatterns = {"/ProyectosServlet"})
+public class ProyectosServlet extends HttpServlet {
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -34,23 +31,6 @@ public class LoginServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String usuario = request.getParameter("usuario");
-        String password = request.getParameter("password");
-        
-        response.setContentType("application/json");
-        Gson gson = new Gson();
-        JsonObject object = new JsonObject();
-        
-        if (usuario.equals("admin") && password.equals("1234")){
-            object.addProperty("error", Boolean.FALSE);
-            object.addProperty("url", "home.jsp");
-        }else {
-            object.addProperty("error", Boolean.TRUE);
-            object.addProperty("errormsg", "Usuario o contrasena incorrecto");
-        }
-        PrintWriter out = response.getWriter();
-        out.print(gson.toJson(object));
-        out.flush();
         
     }
 

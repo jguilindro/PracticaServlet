@@ -1,0 +1,8 @@
+CREATE TABLE usuario (
+                user_name VARCHAR(50) NOT NULL,
+                password VARCHAR(20) NOT NULL,
+                emial VARCHAR(100) NOT NULL,
+                nombre VARCHAR(100) NOT NULL,
+                rol VARCHAR(50) NOT NULL,
+                CONSTRAINT usuario_pk PRIMARY KEY (user_name)
+);
